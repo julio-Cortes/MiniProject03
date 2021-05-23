@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Views.ProductDetail">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_margin="50dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/product_image_detail"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="?attr/selectableItemBackground" />
+
+            <Button
+                android:layout_marginTop="30dp"
+                android:id="@+id/add_to_cart_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Agregar al carrito" />
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:id="@+id/product_title_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:text="TextView" />
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:id="@+id/product_price_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="TextView" />
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:id="@+id/product_description_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

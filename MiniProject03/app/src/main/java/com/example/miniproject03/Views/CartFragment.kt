@@ -1,0 +1,63 @@
+package com.example.miniproject03.Views
+
+import android.os.Bundle
+import android.util.proto.ProtoOutputStream
+import android.view.*
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.example.miniproject03.Models.Product
+import com.example.miniproject03.R
+import com.example.miniproject03.ViewModels.ProductViewModel
+import okhttp3.internal.assertThreadDoesntHoldLock
+
+
+class CartFragment : Fragment() {
+
+    lateinit var recyclerView: RecyclerView
+    var adapter =MyProductCartRecyclerViewAdapter()
+    private val viewModel: ProductViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_cart_list, container, false)
+        adapter=   MyProductCartRecyclerViewAdapter()
+        setHasOptionsMenu(true)
+        recyclerView = view.findViewById(R.id.list)
+        recyclerView.adapter = adapter
+        val totalTextView = view.findViewById<TextView>(R.id.total)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
+        viewModel.myCart.observe(this, Observer{ product ->
+            adapter.total = 0.0
+            adapter.loadProducts(product )
+            totalTextView.setText("TOTAL$:${adapter.total.toString()}")
+        })
+        return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater : MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return true
+    }
+    private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.RIGHT) {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            viewModel.deleteCart((adapter.values[viewHolder.adapterPosition]))
+            adapter.values.removeAt(viewHolder.adapterPosition)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+}
