@@ -28,9 +28,20 @@
         android:layout_height="wrap_content"
         android:text="TOTAL$"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/list"
+        app:layout_constraintBottom_toTopOf="@id/see_map_button"
+        app:layout_constraintEnd_toStartOf="@+id/see_map_button"
         app:layout_constraintStart_toStartOf="parent">
 
     </TextView>
+    <Button
+        android:id="@+id/see_map_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/total"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+    </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>

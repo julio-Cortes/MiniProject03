@@ -3,10 +3,12 @@ package com.example.miniproject03.Views
 import android.os.Bundle
 import android.util.proto.ProtoOutputStream
 import android.view.*
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.miniproject03.Models.Product
@@ -31,7 +33,21 @@ class CartFragment : Fragment() {
         recyclerView = view.findViewById(R.id.list)
         recyclerView.adapter = adapter
         val totalTextView = view.findViewById<TextView>(R.id.total)
+        val button = view.findViewById<Button>(R.id.see_map_button)
+        viewModel.myCart.observe(this, Observer {
+            viewModel.updateData(it)
+        })
+
+        button.setOnClickListener{
+            println(viewModel.cart)
+            val directons = CartFragmentDirections.actionCartFragmentToMapsFragment(viewModel.cart.toTypedArray())
+            view?.let { Navigation.findNavController(it).navigate(directons) }
+        }
+
+
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
+
+
         viewModel.myCart.observe(this, Observer{ product ->
             adapter.total = 0.0
             adapter.loadProducts(product )

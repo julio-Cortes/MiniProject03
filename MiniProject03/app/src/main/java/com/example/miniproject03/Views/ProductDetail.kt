@@ -8,11 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.miniproject03.Models.ProductCart
-import com.example.miniproject03.Views.ProductDetailArgs
 import com.example.miniproject03.R
+import com.example.miniproject03.Service.LocationService
 import com.example.miniproject03.ViewModels.ProductViewModel
 import com.squareup.picasso.Picasso
 
@@ -37,8 +35,7 @@ class ProductDetail : Fragment() {
         descriptionTextView.setText(product.description)
         val button = view.findViewById<Button>(R.id.add_to_cart_button)
         button.setOnClickListener{
-
-            viewModel.addToCart(product.title,product.price)
+            this.getLocation(product.title,product.price)
 
             activity?.onBackPressed()
         }
@@ -52,6 +49,16 @@ class ProductDetail : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_productDetail_to_cartFragment) }
         return true
+    }
+
+    fun getLocation(title: String, price: Double) {
+        val list = mutableListOf<Double>()
+        LocationService.getLocation().observe(this, {
+            list.add(it.latitude)
+            list.add(it.longitude)
+            viewModel.addToCart(title,price,list[0],list[1])
+        })
+
     }
 
 }

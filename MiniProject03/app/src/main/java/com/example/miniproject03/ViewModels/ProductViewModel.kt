@@ -17,10 +17,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
 
-    fun addToCart(title:String, price:Double) {
+    fun addToCart(title: String, price: Double, latitud: Double, longitude: Double) {
+
         viewModelScope.launch(Dispatchers.IO) {
             val length = room.productCartDao().getDataCount()
-            room.productCartDao().insert(ProductCart(length+1,price,title))
+
+            room.productCartDao().insert(ProductCart(length+1,price,title,longitude,latitud))
         }
     }
     fun deleteCart(product: ProductCart)
@@ -30,8 +32,15 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
 
+    fun updateData(it: MutableList<ProductCart>?) {
+        if (it != null) {
+            cart = it
+        }
+
+    }
 
 
+    var cart = mutableListOf<ProductCart>()
     var myCart: LiveData<MutableList<ProductCart>>
     var productRepository: ProductRepository
     val  productCartRepository:ProductCartRepository

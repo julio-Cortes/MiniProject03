@@ -25,7 +25,9 @@ data class ProductCart(
     @PrimaryKey
     val id: Int,
     val price: Double,
-    val title: String
+    val title: String,
+    val longtiud: Double,
+    val latitud: Double
 ): Parcelable{
 
 }

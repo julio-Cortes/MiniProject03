@@ -31,10 +31,11 @@ class ProductFragment : Fragment() , OnClickListener{
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_product_list, container, false)
-        setHasOptionsMenu(true)
+
         recyclerView = view.findViewById(R.id.list)
         adapter = MyProductRecyclerViewAdapter(this)
         recyclerView.adapter = adapter
+        setHasOptionsMenu(true)
         loadProducts()
         viewModel.myProduct.observe(this, Observer{ product ->
             adapter.loadProducts(product)
