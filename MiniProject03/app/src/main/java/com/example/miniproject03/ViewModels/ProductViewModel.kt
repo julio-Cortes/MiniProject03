@@ -1,19 +1,27 @@
 package com.example.miniproject03.ViewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
 import com.example.miniproject03.Models.*
+import com.example.miniproject03.Retrofit.ProductRemoteRepository
+import com.example.miniproject03.Views.MyProductCartRecyclerViewAdapter
+import com.example.miniproject03.Views.MyProductRecyclerViewAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ProductViewModel(application: Application): AndroidViewModel(application) {
+class ProductViewModel(application: Application, productRemoteRepository: ProductRemoteRepository,
+                       productCartRepository: ProductCartRepository, productRepository: ProductRepository,
+                       room: AppDatabase): AndroidViewModel(application) {
 
     fun addProduct(product: Product) {
         viewModelScope.launch(Dispatchers.IO) {
-            room.productDao().insert(product)
+            productRepository.addProduct(product)
         }
     }
 
@@ -21,14 +29,14 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
         viewModelScope.launch(Dispatchers.IO) {
             val length = room.productCartDao().getDataCount()
+            productCartRepository.addProduct(ProductCart(length+1,price,title,longitude,latitud))
 
-            room.productCartDao().insert(ProductCart(length+1,price,title,longitude,latitud))
         }
     }
     fun deleteCart(product: ProductCart)
     {
         viewModelScope.launch(Dispatchers.IO) {
-            room.productCartDao().delete(product)
+            productCartRepository.deleteProduct(product)
         }
     }
 
@@ -38,24 +46,41 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
 
     }
+    fun loadData(adapter:MyProductRecyclerViewAdapter){
+        val requestCall = productRemoteRepository.getProducts()
+        requestCall.enqueue(object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                Log.d("Response", "onResponse: ${response.body()}")
+                if (response.isSuccessful){
+                    val productlist  = response.body()!!
+                    Log.d("Response", "productlist size : ${productlist.size}")
+                    adapter.loadProducts( response.body()!!)
+                    adapter.values.forEach{
+                        addProduct(it)
 
+                    }
+                }else{
+                    println("Something went wrong ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                println("Something went wrong $t")
+            }
+        })
+    }
 
     var cart = mutableListOf<ProductCart>()
     var myCart: LiveData<MutableList<ProductCart>>
-    var productRepository: ProductRepository
-    val  productCartRepository:ProductCartRepository
-    var myProduct: LiveData<List<Product>>
-    lateinit var app :Application
 
-    val room: AppDatabase = Room.databaseBuilder(application, AppDatabase::class.java, "products").build()
+    var myProduct: LiveData<List<Product>>
+    val room = room
+    val productRemoteRepository = productRemoteRepository
+    val productRepository = productRepository
+    val productCartRepository = productCartRepository
+
     init{
-        val productDao = room.productDao()
-        val productCartDao = room.productCartDao()
-        productRepository = ProductRepository(productDao)
-        productCartRepository = ProductCartRepository(productCartDao)
         myProduct = productRepository.allProduct
         myCart = productCartRepository.allProduct
-
 
 
     }

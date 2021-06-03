@@ -15,6 +15,8 @@ class MyProductCartRecyclerViewAdapter(
 ) : RecyclerView.Adapter<MyProductCartRecyclerViewAdapter.ViewHolder>() {
     var values = mutableListOf<ProductCart>()!!
     var total = 0.0
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_cart, parent, false)

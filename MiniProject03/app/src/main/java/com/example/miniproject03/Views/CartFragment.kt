@@ -1,27 +1,24 @@
 package com.example.miniproject03.Views
 
 import android.os.Bundle
-import android.util.proto.ProtoOutputStream
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.miniproject03.Models.Product
 import com.example.miniproject03.R
 import com.example.miniproject03.ViewModels.ProductViewModel
-import okhttp3.internal.assertThreadDoesntHoldLock
+import org.koin.android.ext.android.inject
 
 
 class CartFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView
     var adapter =MyProductCartRecyclerViewAdapter()
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

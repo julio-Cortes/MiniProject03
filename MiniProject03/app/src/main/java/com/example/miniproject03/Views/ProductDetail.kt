@@ -13,11 +13,12 @@ import com.example.miniproject03.R
 import com.example.miniproject03.Service.LocationService
 import com.example.miniproject03.ViewModels.ProductViewModel
 import com.squareup.picasso.Picasso
+import org.koin.android.ext.android.inject
 
 
 class ProductDetail : Fragment() {
     val args : ProductDetailArgs by navArgs()
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by inject()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.miniproject03.Models.ProductCart
 import com.example.miniproject03.R
-import com.example.miniproject03.Retrofit.ServiceBuilder.builder
 import com.example.miniproject03.ViewModels.ProductViewModel
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,9 +18,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import org.koin.android.ext.android.inject
 
 class MapsFragment : Fragment() {
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by inject()
     val args: MapsFragmentArgs by navArgs()
     private val callback = OnMapReadyCallback { googleMap ->
         if (args.cart.size !=0){
